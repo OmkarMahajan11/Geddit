@@ -1,0 +1,8 @@
+sort comments
+user history (posts and comments)
+comment tree
+votes on both posts and comments
+comments on both posts and comments
+verification email
+forget password email
+multiple roles for user

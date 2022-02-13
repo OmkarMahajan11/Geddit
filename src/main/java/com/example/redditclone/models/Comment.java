@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 import java.time.Instant;
 
 @Entity
@@ -25,7 +25,7 @@ public class Comment {
 
 	private Instant createdAt;
 
-	@NotEmpty
+	@NotBlank(message="Text required")
 	private String text;
 
 	@ManyToOne(fetch = FetchType.LAZY)

@@ -1,11 +1,13 @@
 package com.example.redditclone.dtos;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 
 @Data
-@RequiredArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 public class LoginRequest {
-	private final String username;
-	private final String password;
+	private String username;
+	private String password;
 }

@@ -29,14 +29,9 @@ public class Subreddit {
 	private Instant createdDate;
 
 	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "authorUserId", referencedColumnName="userId")
 	private User creator;
 
-	@OneToMany(fetch = FetchType.LAZY)
+	@OneToMany(fetch = FetchType.LAZY, mappedBy="subreddit")
 	private List<Post> posts;
-
-	@OneToMany(fetch = FetchType.LAZY)
-	private List<User> subscribers;
-
-	@OneToMany(fetch = FetchType.LAZY)
-	private List<User> mods;
 }

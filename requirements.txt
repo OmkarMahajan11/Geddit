@@ -1,3 +1,7 @@
+add subscribers in subreddits model
+add mods to subreddit
+feature of banning a user from a subreddit
+search functionality for subreddit, user and post
 sort comments
 user history (posts and comments)
 comment tree

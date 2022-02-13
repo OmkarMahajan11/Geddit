@@ -19,7 +19,6 @@ public class AuthService {
 		User user = new User();
 		user.setUsername(registerRequest.getUsername());
 		user.setEmail(registerRequest.getEmail());
-		user.setRole(registerRequest.getRole());
 		user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
 		user.setCreatedAt(Instant.now());
 		userService.createUser(user);

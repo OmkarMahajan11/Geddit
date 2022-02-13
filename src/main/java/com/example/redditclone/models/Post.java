@@ -8,6 +8,7 @@ import org.springframework.lang.Nullable;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.time.Instant;
+import java.util.List;
 
 @Entity
 @Data
@@ -20,10 +21,6 @@ public class Post {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long postId;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="userId", referencedColumnName="userId")
-	private User author;
-
 	@NotBlank(message="Description is required")
 	private String description;
 
@@ -35,6 +32,13 @@ public class Post {
 	private String url;
 
 	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="authorUserId", referencedColumnName="userId")
+	private User author;
+
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "subredditId", referencedColumnName = "subredditId")
 	private Subreddit subreddit;
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy="post")
+	private List<Comment> comments;
 }

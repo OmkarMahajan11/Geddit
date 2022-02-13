@@ -1,11 +1,14 @@
-package com.example.redditclone.config;
+package com.example.redditclone.security;
 
+import com.example.redditclone.filters.JWTAuthenticationFilter;
+import com.example.redditclone.filters.JWTAuthorizationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -28,8 +31,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.authorizeRequests()
 			.antMatchers("/api/auth/**")
 			.permitAll()
-			.anyRequest()
-			.authenticated();
+			.anyRequest().authenticated()
+			.and()
+			.addFilter(new JWTAuthenticationFilter(authenticationManager()))
+			.addFilter(new JWTAuthorizationFilter(authenticationManager()))
+			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 	}
 
 	@Bean

@@ -10,7 +10,7 @@ import java.time.Instant;
 import java.util.List;
 
 @Entity
-@Table(name ="subreddits")
+@Table(name ="subreddits", uniqueConstraints = @UniqueConstraint(columnNames="name"))
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

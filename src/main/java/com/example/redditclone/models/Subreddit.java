@@ -29,7 +29,7 @@ public class Subreddit {
 	private Instant createdDate;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "authorUserId", referencedColumnName="userId")
+	@JoinColumn(name = "creatorUserId", referencedColumnName="userId")
 	private User creator;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy="subreddit")

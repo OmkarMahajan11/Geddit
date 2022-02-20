@@ -3,6 +3,7 @@ package com.example.redditclone.services;
 import com.example.redditclone.dtos.RegisterRequest;
 import com.example.redditclone.models.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -22,5 +23,12 @@ public class AuthService {
 		user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
 		user.setCreatedAt(Instant.now());
 		userService.createUser(user);
+	}
+
+	public User getCurrentUser() {
+		return userService.findByUsername(
+			SecurityContextHolder.getContext()
+				.getAuthentication().getName()
+		);
 	}
 }

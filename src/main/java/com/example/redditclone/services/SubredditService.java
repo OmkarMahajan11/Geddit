@@ -6,10 +6,8 @@ import com.example.redditclone.models.Post;
 import com.example.redditclone.models.Subreddit;
 import com.example.redditclone.models.User;
 import com.example.redditclone.repositories.SubredditRepository;
-import com.example.redditclone.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,7 +22,7 @@ import java.util.List;
 public class SubredditService {
 
 	private final SubredditRepository subredditRepository;
-	private final UserRepository userRepository;
+	private final AuthService authorService;
 
 	@Transactional
 	public SubredditDto save(SubredditDto subredditDto) {
@@ -34,10 +32,7 @@ public class SubredditService {
 		subreddit.setThumbnailPicture(subredditDto.getThumbnailPicture());
 		subreddit.setCreatedDate(Instant.now());
 
-		User creator = userRepository.findByUsername(
-			SecurityContextHolder.getContext()
-				.getAuthentication().getName()
-		).orElseThrow();
+		User creator = authorService.getCurrentUser();
 
 		subreddit.setCreator(creator);
 		subredditRepository.save(subreddit);
@@ -65,12 +60,10 @@ public class SubredditService {
 
 	@Transactional
 	public List<SubredditDto> getAllCreated() {
-		User creator = userRepository.findByUsername(
-			SecurityContextHolder.getContext()
-				.getAuthentication().getName()
-		).orElseThrow();
+		User creator = authorService.getCurrentUser();
 
-		List<Subreddit> allSubs = subredditRepository.findAllByCreator(creator);
+		List<Subreddit> allSubs = subredditRepository.findAllByCreator(creator)
+			.orElseThrow();
 
 		List<SubredditDto> result = new ArrayList<>();
 		for (Subreddit sub : allSubs) {
@@ -87,7 +80,8 @@ public class SubredditService {
 
 	@Transactional
 	public SubredditDetailsDto getSubredditDetails(Long id) {
-		Subreddit sub = subredditRepository.findBySubredditId(id);
+		Subreddit sub = subredditRepository.findBySubredditId(id)
+			.orElseThrow();
 
 		SubredditDetailsDto subDetails = new SubredditDetailsDto();
 		subDetails.setId(sub.getSubredditId());

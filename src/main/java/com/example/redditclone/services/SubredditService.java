@@ -1,6 +1,8 @@
 package com.example.redditclone.services;
 
+import com.example.redditclone.dtos.SubredditDetailsDto;
 import com.example.redditclone.dtos.SubredditDto;
+import com.example.redditclone.models.Post;
 import com.example.redditclone.models.Subreddit;
 import com.example.redditclone.models.User;
 import com.example.redditclone.repositories.SubredditRepository;
@@ -11,6 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Date;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +31,7 @@ public class SubredditService {
 		Subreddit subreddit = new Subreddit();
 		subreddit.setName(subredditDto.getName());
 		subreddit.setDescription(subredditDto.getDescription());
+		subreddit.setThumbnailPicture(subredditDto.getThumbnailPicture());
 		subreddit.setCreatedDate(Instant.now());
 
 		User creator = userRepository.findByUsername(
@@ -52,12 +56,14 @@ public class SubredditService {
 			s.setId(sub.getSubredditId());
 			s.setName(sub.getName());
 			s.setDescription(sub.getDescription());
+			s.setThumbnailPicture(sub.getThumbnailPicture());
 			result.add(s);
 		}
 
 		return result;
 	}
 
+	@Transactional
 	public List<SubredditDto> getAllCreated() {
 		User creator = userRepository.findByUsername(
 			SecurityContextHolder.getContext()
@@ -72,20 +78,31 @@ public class SubredditService {
 			s.setId(sub.getSubredditId());
 			s.setName(sub.getName());
 			s.setDescription(sub.getDescription());
+			s.setThumbnailPicture(sub.getThumbnailPicture());
 			result.add(s);
 		}
 
 		return result;
 	}
 
-	public SubredditDto getById(Long id) {
+	@Transactional
+	public SubredditDetailsDto getSubredditDetails(Long id) {
 		Subreddit sub = subredditRepository.findBySubredditId(id);
 
-		SubredditDto result = new SubredditDto();
-		result.setId(id);
-		result.setName(sub.getName());
-		result.setDescription(sub.getDescription());
+		SubredditDetailsDto subDetails = new SubredditDetailsDto();
+		subDetails.setId(sub.getSubredditId());
+		subDetails.setName(sub.getName());
+		subDetails.setDescription(sub.getDescription());
+		subDetails.setThumbnailPicture(sub.getThumbnailPicture());
+		subDetails.setPicture(sub.getPicture());
+		subDetails.setCreatedAt(Date.from(sub.getCreatedDate()));
 
-		return result;
+		List<Post> posts = sub.getPosts();
+		subDetails.setNumberOfPosts(posts.size());
+		subDetails.setTopPosts(posts);
+
+		subDetails.setCreatedBy("u/" + sub.getCreator().getUsername());
+
+		return subDetails;
 	}
 }

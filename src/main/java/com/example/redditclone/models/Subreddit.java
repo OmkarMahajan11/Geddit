@@ -26,6 +26,10 @@ public class Subreddit {
 	@NotBlank(message="Description is required")
 	private String description;
 
+	private String thumbnailPicture;
+
+	private String picture;
+
 	private Instant createdDate;
 
 	@ManyToOne(fetch = FetchType.LAZY)

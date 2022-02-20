@@ -1,5 +1,6 @@
 package com.example.redditclone.controllers;
 
+import com.example.redditclone.dtos.SubredditDetailsDto;
 import com.example.redditclone.dtos.SubredditDto;
 import com.example.redditclone.services.SubredditService;
 import lombok.RequiredArgsConstructor;
@@ -39,9 +40,9 @@ public class SubredditController {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<SubredditDto> getSubredditById(@PathVariable("id") Long id) {
+	public ResponseEntity<SubredditDetailsDto> getSubredditDetails(@PathVariable("id") Long id) {
 		return ResponseEntity
 			.status(HttpStatus.OK)
-			.body(subredditService.getById(id));
+			.body(subredditService.getSubredditDetails(id));
 	}
 }

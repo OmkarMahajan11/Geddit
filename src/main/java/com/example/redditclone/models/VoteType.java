@@ -17,6 +17,6 @@ public enum VoteType {
 		return Arrays.stream(VoteType.values())
 			.filter(value -> value.getDirection().equals(direction))
 			.findAny()
-			.orElseThrow();
+			.orElseThrow(RuntimeException::new);
 	}
 }

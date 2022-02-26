@@ -1,5 +1,6 @@
 package com.example.redditclone.services;
 
+import com.example.redditclone.exceptions.UserNotFoundException;
 import com.example.redditclone.models.User;
 import com.example.redditclone.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +16,7 @@ public class UserService {
 
 	public User findByUsername(String username) {
 		return userRepository.findByUsername(username)
-			.orElseThrow();
+			.orElseThrow(() -> new UserNotFoundException("Username: " + username));
 	}
 
 	@Transactional

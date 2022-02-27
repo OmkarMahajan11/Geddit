@@ -3,7 +3,6 @@ package com.example.redditclone.services;
 import com.example.redditclone.dtos.SubredditDetailsDto;
 import com.example.redditclone.dtos.SubredditDto;
 import com.example.redditclone.exceptions.SubredditNotFoundException;
-import com.example.redditclone.mappers.SubredditDetailsMapper;
 import com.example.redditclone.mappers.SubredditMapper;
 import com.example.redditclone.models.Subreddit;
 import com.example.redditclone.models.User;
@@ -24,7 +23,6 @@ public class SubredditService {
 	private final SubredditRepository subredditRepository;
 	private final AuthService authorService;
 	private final SubredditMapper subredditMapper;
-	private final SubredditDetailsMapper subredditDetailsMapper;
 
 	@Transactional
 	public SubredditDto save(SubredditDto subredditDto) {
@@ -65,7 +63,7 @@ public class SubredditService {
 		Subreddit sub = subredditRepository.findBySubredditId(id)
 			.orElseThrow(() -> new SubredditNotFoundException("Subreddit Id: " + id));
 
-		SubredditDetailsDto subDetails = subredditDetailsMapper.mapSubredditToSubredditDetailsDto(sub);
+		SubredditDetailsDto subDetails = subredditMapper.mapSubredditToSubredditDetailsDto(sub);
 		subDetails.setCreatedBy("u/" + sub.getCreator().getUsername());
 
 		return subDetails;

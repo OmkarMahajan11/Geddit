@@ -16,8 +16,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -31,29 +31,19 @@ public class PostService {
 
 	@Transactional
 	public void save(PostRequest postRequest) {
-		Post post = postMapper.mapPostRequestToPost(postRequest);
-
-		post.setAuthor(authService.getCurrentUser());
+		User user = authService.getCurrentUser();
 		Subreddit subreddit = subredditRepository.findByName(postRequest.getSubredditName())
 			.orElseThrow(() -> new SubredditNotFoundException(postRequest.getSubredditName()));
-		post.setSubreddit(subreddit);
 
+		Post post = postMapper.mapPostRequestToPost(postRequest, subreddit, user);
 		postRepository.save(post);
 	}
 
 	@Transactional
-	public List<PostResponse> getAllPosts() {
-		List<Post> allPosts = postRepository.findAll();
-		List<PostResponse> result = new ArrayList<>();
-
-		for (Post post : allPosts) {
-			PostResponse pr = postMapper.mapPostToPostResponse(post);
-			pr.setSubredditName(post.getSubreddit().getName());
-			pr.setUserName("u/" + post.getAuthor().getUsername());
-			result.add(pr);
-		}
-
-		return result;
+	public List<com.example.redditclone.dtos.PostResponse> getAllPosts() {
+		return postRepository.findAll().stream()
+			.map(postMapper::mapPostToPostResponse)
+			.collect(Collectors.toList());
 	}
 
 	@Transactional
@@ -61,11 +51,7 @@ public class PostService {
 		Post post = postRepository.findById(id)
 			.orElseThrow(() -> new PostNotFoundException("Post Id: " + id));
 
-		PostResponse pr = postMapper.mapPostToPostResponse(post);
-		pr.setSubredditName(post.getSubreddit().getName());
-		pr.setUserName("u/" + post.getAuthor().getUsername());
-
-		return pr;
+		return postMapper.mapPostToPostResponse(post);
 	}
 
 	@Transactional
@@ -74,16 +60,9 @@ public class PostService {
 			.orElseThrow(() -> new SubredditNotFoundException("Subreddit Id: " + id));
 
 		List<Post> posts = postRepository.findAllBySubreddit(subreddit);
-
-		List<PostResponse> result = new ArrayList<>();
-		for (Post post : posts) {
-			PostResponse pr = postMapper.mapPostToPostResponse(post);
-			pr.setSubredditName(post.getSubreddit().getName());
-			pr.setUserName("u/" + post.getAuthor().getUsername());
-			result.add(pr);
-		}
-
-		return result;
+		return posts.stream()
+			.map(postMapper::mapPostToPostResponse)
+			.collect(Collectors.toList());
 	}
 
 	@Transactional
@@ -92,15 +71,8 @@ public class PostService {
 			.orElseThrow(() -> new UserNotFoundException("Username: " + username));
 
 		List<Post> posts = postRepository.findAllByAuthor(user);
-
-		List<PostResponse> result = new ArrayList<>();
-		for (Post post : posts) {
-			PostResponse pr = postMapper.mapPostToPostResponse(post);
-			pr.setSubredditName(post.getSubreddit().getName());
-			pr.setUserName("u/" + post.getAuthor().getUsername());
-			result.add(pr);
-		}
-
-		return result;
+		return posts.stream()
+			.map(postMapper::mapPostToPostResponse)
+			.collect(Collectors.toList());
 	}
 }

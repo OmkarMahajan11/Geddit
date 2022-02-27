@@ -1,9 +1,10 @@
 package com.example.redditclone.mappers;
 
+import com.example.redditclone.dtos.PostResponse;
 import com.example.redditclone.dtos.SubredditDetailsDto;
 import com.example.redditclone.dtos.SubredditDto;
-import com.example.redditclone.models.Post;
 import com.example.redditclone.models.Subreddit;
+import com.example.redditclone.models.User;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Generated;
@@ -11,7 +12,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2022-02-27T00:07:17+0530",
+    date = "2022-02-27T14:32:26+0530",
     comments = "version: 1.4.2.Final, compiler: javac, environment: Java 15.0.1 (Oracle Corporation)"
 )
 @Component
@@ -34,44 +35,51 @@ public class SubredditMapperImpl implements SubredditMapper {
     }
 
     @Override
-    public Subreddit mapDtoToSubreddit(SubredditDto subredditDto) {
-        if ( subredditDto == null ) {
+    public Subreddit mapDtoToSubreddit(SubredditDto subredditDto, User creator) {
+        if ( subredditDto == null && creator == null ) {
             return null;
         }
 
         Subreddit subreddit = new Subreddit();
 
-        if ( subredditDto.getId() != null ) {
-            subreddit.setSubredditId( subredditDto.getId() );
+        if ( subredditDto != null ) {
+            subreddit.setName( subredditDto.getName() );
+            subreddit.setDescription( subredditDto.getDescription() );
+            subreddit.setThumbnailPicture( subredditDto.getThumbnailPicture() );
         }
-        subreddit.setName( subredditDto.getName() );
-        subreddit.setDescription( subredditDto.getDescription() );
-        subreddit.setThumbnailPicture( subredditDto.getThumbnailPicture() );
-
+        if ( creator != null ) {
+            subreddit.setCreator( creator );
+        }
         subreddit.setCreatedDate( java.time.Instant.now() );
 
         return subreddit;
     }
 
     @Override
-    public SubredditDetailsDto mapSubredditToSubredditDetailsDto(Subreddit subreddit) {
-        if ( subreddit == null ) {
+    public SubredditDetailsDto mapSubredditToSubredditDetailsDto(Subreddit subreddit, List<PostResponse> posts, User creator) {
+        if ( subreddit == null && posts == null && creator == null ) {
             return null;
         }
 
         SubredditDetailsDto subredditDetailsDto = new SubredditDetailsDto();
 
-        subredditDetailsDto.setId( subreddit.getSubredditId() );
-        List<Post> list = subreddit.getPosts();
-        if ( list != null ) {
-            subredditDetailsDto.setTopPosts( new ArrayList<Post>( list ) );
+        if ( subreddit != null ) {
+            subredditDetailsDto.setId( subreddit.getSubredditId() );
+            subredditDetailsDto.setName( subreddit.getName() );
+            subredditDetailsDto.setDescription( subreddit.getDescription() );
+            subredditDetailsDto.setThumbnailPicture( subreddit.getThumbnailPicture() );
+            subredditDetailsDto.setPicture( subreddit.getPicture() );
         }
-        subredditDetailsDto.setName( subreddit.getName() );
-        subredditDetailsDto.setDescription( subreddit.getDescription() );
-        subredditDetailsDto.setThumbnailPicture( subreddit.getThumbnailPicture() );
-        subredditDetailsDto.setPicture( subreddit.getPicture() );
-
-        subredditDetailsDto.setNumberOfPosts( subreddit.getPosts().size() );
+        if ( posts != null ) {
+            List<PostResponse> list = posts;
+            if ( list != null ) {
+                subredditDetailsDto.setTopPosts( new ArrayList<PostResponse>( list ) );
+            }
+        }
+        if ( creator != null ) {
+            subredditDetailsDto.setCreatedBy( creator.getUsername() );
+        }
+        subredditDetailsDto.setNumberOfPosts( posts.size() );
         subredditDetailsDto.setCreatedAt( java.util.Date.from(subreddit.getCreatedDate()) );
 
         return subredditDetailsDto;

@@ -3,10 +3,10 @@ add mods to subreddit
 feature of banning a user from a subreddit
 search functionality for subreddit, user and post
 sort comments
-user history (posts and comments)
+user history (postRespons and comments)
 comment tree
-votes on both posts and comments
-comments on both posts and comments
+votes on both postRespons and comments
+comments on both postRespons and comments
 verification email
 forget password email
 multiple roles for user

@@ -1,8 +1,10 @@
 package com.example.redditclone.services;
 
+import com.example.redditclone.dtos.PostResponse;
 import com.example.redditclone.dtos.SubredditDetailsDto;
 import com.example.redditclone.dtos.SubredditDto;
 import com.example.redditclone.exceptions.SubredditNotFoundException;
+import com.example.redditclone.mappers.PostMapper;
 import com.example.redditclone.mappers.SubredditMapper;
 import com.example.redditclone.models.Subreddit;
 import com.example.redditclone.models.User;
@@ -23,16 +25,12 @@ public class SubredditService {
 	private final SubredditRepository subredditRepository;
 	private final AuthService authorService;
 	private final SubredditMapper subredditMapper;
+	private final PostMapper postMapper;
 
 	@Transactional
 	public SubredditDto save(SubredditDto subredditDto) {
-		Subreddit subreddit = subredditMapper.mapDtoToSubreddit(subredditDto);
-
-		User creator = authorService.getCurrentUser();
-
-		subreddit.setCreator(creator);
+		Subreddit subreddit = subredditMapper.mapDtoToSubreddit(subredditDto, authorService.getCurrentUser());
 		subredditRepository.save(subreddit);
-
 		subredditDto.setId(subreddit.getSubredditId());
 		return subredditDto;
 	}
@@ -63,9 +61,10 @@ public class SubredditService {
 		Subreddit sub = subredditRepository.findBySubredditId(id)
 			.orElseThrow(() -> new SubredditNotFoundException("Subreddit Id: " + id));
 
-		SubredditDetailsDto subDetails = subredditMapper.mapSubredditToSubredditDetailsDto(sub);
-		subDetails.setCreatedBy("u/" + sub.getCreator().getUsername());
+		List<PostResponse> posts = sub.getPosts().stream()
+			.map(postMapper::mapPostToPostResponse)
+			.collect(Collectors.toList());
 
-		return subDetails;
+		return subredditMapper.mapSubredditToSubredditDetailsDto(sub, posts, sub.getCreator());
 	}
 }

@@ -1,6 +1,5 @@
 package com.example.redditclone.dtos;
 
-import com.example.redditclone.models.Post;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,5 +19,5 @@ public class SubredditDetailsDto {
 	private String createdBy;
 	private int numberOfPosts;
 	private Date createdAt;
-	private List<Post> topPosts;
+	private List<PostResponse> topPosts;
 }

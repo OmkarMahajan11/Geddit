@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2022-02-27T14:29:06+0530",
+    date = "2022-03-01T19:33:46+0530",
     comments = "version: 1.4.2.Final, compiler: javac, environment: Java 15.0.1 (Oracle Corporation)"
 )
 @Component
@@ -48,42 +48,13 @@ public class PostMapperImpl implements PostMapper {
         PostResponse postResponse = new PostResponse();
 
         postResponse.setId( post.getPostId() );
-        postResponse.setSubredditName( postSubredditName( post ) );
-        postResponse.setAuthorName( postAuthorUsername( post ) );
         postResponse.setUrl( post.getUrl() );
         postResponse.setDescription( post.getDescription() );
         postResponse.setVoteCount( post.getVoteCount() );
 
+        postResponse.setSubredditName( post.getSubreddit().getName() );
+        postResponse.setAuthorName( post.getAuthor().getUsername() );
+
         return postResponse;
-    }
-
-    private String postSubredditName(Post post) {
-        if ( post == null ) {
-            return null;
-        }
-        Subreddit subreddit = post.getSubreddit();
-        if ( subreddit == null ) {
-            return null;
-        }
-        String name = subreddit.getName();
-        if ( name == null ) {
-            return null;
-        }
-        return name;
-    }
-
-    private String postAuthorUsername(Post post) {
-        if ( post == null ) {
-            return null;
-        }
-        User author = post.getAuthor();
-        if ( author == null ) {
-            return null;
-        }
-        String username = author.getUsername();
-        if ( username == null ) {
-            return null;
-        }
-        return username;
     }
 }

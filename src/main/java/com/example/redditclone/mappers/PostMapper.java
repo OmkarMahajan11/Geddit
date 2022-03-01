@@ -1,6 +1,7 @@
 package com.example.redditclone.mappers;
 
 import com.example.redditclone.dtos.PostRequest;
+import com.example.redditclone.dtos.PostResponse;
 import com.example.redditclone.models.Post;
 import com.example.redditclone.models.Subreddit;
 import com.example.redditclone.models.User;
@@ -17,7 +18,7 @@ public interface PostMapper {
 	Post mapPostRequestToPost(PostRequest postRequest, Subreddit subreddit, User user);
 
 	@Mapping(target = "id", source = "postId")
-	@Mapping(target = "subredditName", source = "subreddit.name")
-	@Mapping(target = "authorName", source = "author.username")
-	com.example.redditclone.dtos.PostResponse mapPostToPostResponse(Post post);
+	@Mapping(target = "subredditName", expression = "java(post.getSubreddit().getName())")
+	@Mapping(target = "authorName", expression = "java(post.getAuthor().getUsername())")
+	PostResponse mapPostToPostResponse(Post post);
 }

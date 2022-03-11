@@ -10,8 +10,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2022-03-01T19:33:46+0530",
-    comments = "version: 1.4.2.Final, compiler: javac, environment: Java 15.0.1 (Oracle Corporation)"
+    date = "2022-03-12T00:40:56+0530",
+    comments = "version: 1.4.2.Final, compiler: Eclipse JDT (IDE) 1.4.50.v20210914-1429, environment: Java 17.0.2 (Eclipse Adoptium)"
 )
 @Component
 public class PostMapperImpl implements PostMapper {
@@ -48,8 +48,8 @@ public class PostMapperImpl implements PostMapper {
         PostResponse postResponse = new PostResponse();
 
         postResponse.setId( post.getPostId() );
-        postResponse.setUrl( post.getUrl() );
         postResponse.setDescription( post.getDescription() );
+        postResponse.setUrl( post.getUrl() );
         postResponse.setVoteCount( post.getVoteCount() );
 
         postResponse.setSubredditName( post.getSubreddit().getName() );

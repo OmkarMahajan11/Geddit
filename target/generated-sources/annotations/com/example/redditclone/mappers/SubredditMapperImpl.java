@@ -12,8 +12,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2022-02-27T14:32:26+0530",
-    comments = "version: 1.4.2.Final, compiler: javac, environment: Java 15.0.1 (Oracle Corporation)"
+    date = "2022-03-12T00:40:55+0530",
+    comments = "version: 1.4.2.Final, compiler: Eclipse JDT (IDE) 1.4.50.v20210914-1429, environment: Java 17.0.2 (Eclipse Adoptium)"
 )
 @Component
 public class SubredditMapperImpl implements SubredditMapper {
@@ -27,8 +27,8 @@ public class SubredditMapperImpl implements SubredditMapper {
         SubredditDto subredditDto = new SubredditDto();
 
         subredditDto.setId( subreddit.getSubredditId() );
-        subredditDto.setName( subreddit.getName() );
         subredditDto.setDescription( subreddit.getDescription() );
+        subredditDto.setName( subreddit.getName() );
         subredditDto.setThumbnailPicture( subreddit.getThumbnailPicture() );
 
         return subredditDto;
@@ -43,8 +43,8 @@ public class SubredditMapperImpl implements SubredditMapper {
         Subreddit subreddit = new Subreddit();
 
         if ( subredditDto != null ) {
-            subreddit.setName( subredditDto.getName() );
             subreddit.setDescription( subredditDto.getDescription() );
+            subreddit.setName( subredditDto.getName() );
             subreddit.setThumbnailPicture( subredditDto.getThumbnailPicture() );
         }
         if ( creator != null ) {
@@ -65,10 +65,10 @@ public class SubredditMapperImpl implements SubredditMapper {
 
         if ( subreddit != null ) {
             subredditDetailsDto.setId( subreddit.getSubredditId() );
-            subredditDetailsDto.setName( subreddit.getName() );
             subredditDetailsDto.setDescription( subreddit.getDescription() );
-            subredditDetailsDto.setThumbnailPicture( subreddit.getThumbnailPicture() );
+            subredditDetailsDto.setName( subreddit.getName() );
             subredditDetailsDto.setPicture( subreddit.getPicture() );
+            subredditDetailsDto.setThumbnailPicture( subreddit.getThumbnailPicture() );
         }
         if ( posts != null ) {
             List<PostResponse> list = posts;

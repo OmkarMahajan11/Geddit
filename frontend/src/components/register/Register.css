@@ -1,0 +1,7 @@
+.form {
+  border: 2px solid;
+  padding: 30px;
+  text-align: center;
+  border-color: "red";
+  background-color: blue;
+}

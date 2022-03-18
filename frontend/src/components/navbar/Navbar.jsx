@@ -1,10 +1,9 @@
 import React from "react";
+import "./Navbar.css";
 
-import Searchbar from "./searchbar/Searchbar";
 import Logo from "./logo/Logo";
 import Actions from "./actions/Actions";
-
-import "./Navbar.css";
+import Searchbar from "./searchbar/Searchbar";
 
 const Navbar = () => {
   return (

@@ -1,13 +1,7 @@
 import React from "react";
 
-import Navbar from "../navbar/Navbar";
-
 const Landing = () => {
-  return (
-    <>
-      <Navbar />
-    </>
-  );
+  return <>Landing</>;
 };
 
 export default Landing;
